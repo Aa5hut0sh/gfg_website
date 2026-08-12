@@ -24,8 +24,16 @@ export async function getStats(platform: string, platformId: string) {
         0,
       );
 
-      const contribRes = await axios.get(`https://github-contributions-api.deno.dev/${platformId}.json`);
-      const totalContributions = contribRes.data.totalContributions;
+      let totalContributions = 0;
+      try {
+        const contribRes = await axios.get(
+          `https://github-contributions-api.deno.dev/${platformId}.json`,
+          { timeout: 8000 }
+        );
+        totalContributions = contribRes.data.totalContributions || 0;
+      } catch (e) {
+        console.warn("Contributions API failed, defaulting to 0:", e);
+      }
       
 
       apiResponse = {
