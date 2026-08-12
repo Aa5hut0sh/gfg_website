@@ -25,8 +25,12 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 startCronJobs();
 
-app.get("helth" , (req:Request , res:Response)=>{
-    res.send("Working fine");
+app.get("/health", (req: Request, res: Response) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+    });
 });
 
 app.use("/api/auth" , AuthRouter);
