@@ -26,13 +26,35 @@ export async function getStats(platform: string, platformId: string) {
 
       let totalContributions = 0;
       try {
-        const contribRes = await axios.get(
-          `https://github-contributions-api.deno.dev/${platformId}.json`,
-          { timeout: 8000 }
+        const contribQuery = {
+          query: `
+            query($username: String!) {
+              user(login: $username) {
+                contributionsCollection {
+                  contributionCalendar {
+                    totalContributions
+                  }
+                }
+              }
+            }
+          `,
+          variables: { username: platformId },
+        };
+
+        const contribRes = await axios.post(
+          "https://api.github.com/graphql",
+          contribQuery,
+          { headers, timeout: 8000 },
         );
-        totalContributions = contribRes.data.totalContributions || 0;
-      } catch (e) {
-        console.warn("Contributions API failed, defaulting to 0:", e);
+
+        totalContributions =
+          contribRes.data?.data?.user?.contributionsCollection
+            ?.contributionCalendar?.totalContributions || 0;
+      } catch (contribError) {
+        console.warn(
+          `Failed to fetch contributions for ${platformId}, defaulting to 0:`,
+          (contribError as Error).message,
+        );
       }
       
 
