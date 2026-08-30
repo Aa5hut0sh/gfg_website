@@ -6,7 +6,7 @@ import { FiArrowRight, FiCode, FiUsers, FiCalendar } from "react-icons/fi";
 import {
   SiReact,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiJavascript,
   SiDocker,
   SiGit,
