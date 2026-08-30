@@ -11,10 +11,8 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
 
-    /* 🔥 ADD THESE TWO */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
+"paths": {
+      "@/*": ["./src/*"]
     },
 
     /* Types */
