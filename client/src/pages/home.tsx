@@ -21,7 +21,7 @@ import GlowBlob from "@/components/GlowBlob";
 const icons = [
   <SiReact />,
   <SiHtml5 />,
-  <SiCss3 />,
+  <SiCss />,
   <SiJavascript />,
   <SiDocker />,
   <SiGit />,
