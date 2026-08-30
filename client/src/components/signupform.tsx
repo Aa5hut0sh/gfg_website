@@ -5,6 +5,8 @@ import { signup, signupAdmin, googleLogin } from "../services/auth.service";
 import { Mail, Lock, User, ShieldCheck, ArrowRight, KeyRound, RefreshCw } from "lucide-react";
 import { useAuth } from "../auth/authContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const SignupForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -48,7 +50,7 @@ const SignupForm = () => {
     setSuccessMsg("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      const res = await fetch(`${API_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email }),

@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:3000/api/auth"; // backend port
+
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000"; // backend port
+
+const API_URL =  `${baseUrl}/api/auth`; // backend port
 
 export const login = async (email: string, password: string) => {
   const res = await fetch(`${API_URL}/login`, {
@@ -75,7 +78,7 @@ export const googleLogin = async (googleToken: string) => {
 export const adminLogin = async (email: string, password: string, adminSecret: string) => {
   try {
    
-    const response = await fetch("http://localhost:5000/api/auth/admin-login", {
+    const response = await fetch(`${API_URL}/api/auth/admin-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
