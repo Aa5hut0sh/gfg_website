@@ -47,6 +47,6 @@ app.use((err :any , req :Request, res:Response, next:NextFunction) => {
   });
 });
 
-app.listen(PORT , ()=>{
-    console.log(`App is listening on PORT = ${PORT}`);
+app.listen(PORT as number, "0.0.0.0", () => {
+    console.log(`App is listening universally on PORT = ${PORT}`);
 });

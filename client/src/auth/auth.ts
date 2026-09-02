@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:3000/api/auth"; // backend port
+
+const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000"; // backend port
+
+const API_URL =  `${baseUrl}/api/auth`; // backend port
 
 export const login = async (email: string, password: string) => {
   const res = await fetch(`${API_URL}/login`, {
@@ -70,30 +73,37 @@ export const googleLogin = async (googleToken: string) => {
 };
 
 
-export const adminLogin = async (
-  email: string,
-  password: string,
-  adminSecret: string
-) => {
-  const res = await fetch(`${API_URL}/admin/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password, adminSecret }),
-  });
-  if (!res.ok) {
-    try {
-      const data = await res.json();
-      throw new Error(data?.message || data?.error || "Admin login failed");
-    } catch {
-      const text = await res.text().catch(() => null);
-      throw new Error(text || "Admin login failed");
-    }
-  }
+
+
+export const adminLogin = async (email: string, password: string, adminSecret: string) => {
   try {
-    return await res.json();
-  } catch {
-    const text = await res.text().catch(() => null);
-    throw new Error(text || "Invalid JSON response from server");
+   
+    const response = await fetch(`${API_URL}/api/auth/admin-login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      
+      body: JSON.stringify({ email, password, adminSecret }), 
+    });
+
+    const data = await response.json();
+
+    // 2. Agar backend ne error diya (jaise wrong password), toh usko throw karo
+    if (!response.ok) {
+      throw new Error(data.message || data.error || "Login failed");
+    }
+
+   
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    
+    
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    return data;
+  } catch (error: any) {
+    throw error;
   }
 };
 

@@ -31,7 +31,7 @@ export const signupSchema = z.object({
       .string()
       .regex(
         /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
-        "Email must be of form 24cs3013@rgipt.ac.in"
+        "Email must be of form @rgipt.ac.in"
       ),
 
     password: z

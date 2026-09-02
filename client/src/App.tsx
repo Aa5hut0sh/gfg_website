@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./pages/login";
 import SignupForm from "./pages/signup";
-import { Navigate } from "react-router-dom";
 import Home from "./pages/home";
 import Team from "./pages/teams";
 import Resources from "./pages/resources";
@@ -16,6 +15,7 @@ import { useAuth } from "./auth/authContext";
 import Background from "./components/GlowBlob";
 import Lauch from "./pages/lauch";
 import ProfilesPage from "./pages/PlatformPage";
+import ForgotPassword from "./components/ForgotPassword"; 
 
 const ProtectedRoute = ({
   children,
@@ -57,7 +57,9 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/codefolio" element={<ProfilesPage />} />
-             
+            
+            {/* 2. FORGOT PASSWORD ROUTE KO ROUTES BLOCK KE ANDAR RAKHA HAI */}
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             <Route
               path="/events/create"

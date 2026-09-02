@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, Link,useLocation } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { login, googleLogin } from "../services/auth.service";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { useAuth } from "@/auth/authContext";
+
 const LoginForm = () => {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
@@ -29,7 +30,7 @@ const LoginForm = () => {
         navigate(from, { replace: true });
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid email or password");
+      setError(err.response?.data?.message || "Invalid email or password.");
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +39,7 @@ const LoginForm = () => {
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
       if (!credentialResponse?.credential) {
-        setError("Google credential missing");
+        setError("Google authentication credential is missing.");
         return;
       }
 
@@ -48,13 +49,13 @@ const LoginForm = () => {
         navigate(from, { replace: true });
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Google login failed");
+      setError(err.response?.data?.message || "Google authentication failed.");
     }
   };
 
   return (
-    <div className="min-h-screen  flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-[#0e0e0e] border border-white/10 rounded-2xl p-8">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-[#0e0e0e] border border-white/10 rounded-2xl p-8 shadow-2xl">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-semibold text-white">
@@ -80,17 +81,29 @@ const LoginForm = () => {
           </div>
 
           {/* Password */}
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
-            <input
-              type="password"
-              placeholder="Password"
-              required
-              className="w-full bg-black border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:border-green-500 outline-none"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
+          <div className="space-y-1">
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                className="w-full bg-black border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:border-green-500 outline-none"
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+            </div>
+            
+            {/* Forgot Password Link */}
+            <div className="flex justify-end pt-1">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-gray-400 hover:text-green-500 transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           {error && <p className="text-red-500 text-xs text-center">{error}</p>}
@@ -98,7 +111,7 @@ const LoginForm = () => {
           {/* Submit */}
           <button
             disabled={isLoading}
-            className="w-full mt-4 bg-green-600 hover:bg-green-500 text-black font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
+            className="w-full mt-2 bg-green-600 hover:bg-green-500 text-black font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition active:scale-[0.98] disabled:opacity-50"
           >
             {isLoading ? "Signing in..." : "Sign in"}
             {!isLoading && <ArrowRight className="w-4 h-4" />}
@@ -116,7 +129,7 @@ const LoginForm = () => {
         <div className="flex justify-center">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => setError("Google login failed")}
+            onError={() => setError("Google authentication failed.")}
             theme="filled_black"
             shape="pill"
             text="signin_with"
