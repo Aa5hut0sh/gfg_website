@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ProfileCard from "./ProfileCard";
+import TeamYearDial from "./TeamYearDial";
+
 import {
   getTeamMembers,
   type TeamMember,
@@ -18,26 +20,27 @@ export default function TeamMemberList() {
   const [error, setError] =
     useState("");
 
-  // ============================================================
-  // LOAD ALL TEAM MEMBERS
-  // ============================================================
-
   useEffect(() => {
     const loadTeam = async () => {
       try {
         setLoading(true);
         setError("");
 
-        const response =
-          await getTeamMembers();
+        const response = await getTeamMembers();
 
-        setMembers(response.members || []);
+        const loadedMembers =
+          response.members || [];
+
+        setMembers(loadedMembers);
       } catch (err: any) {
-        console.error(err);
+        console.error(
+          "Failed to load team:",
+          err
+        );
 
         setError(
           err?.response?.data?.message ||
-            "Unable to load team members",
+            "Unable to load team members"
         );
       } finally {
         setLoading(false);
@@ -47,40 +50,29 @@ export default function TeamMemberList() {
     loadTeam();
   }, []);
 
-  // ============================================================
-  // ONLY YEARS WHICH HAVE MEMBERS
-  // ============================================================
-
   const availableYears = useMemo(() => {
     return Array.from(
       new Set(
         members.map(
-          (member) => member.batchYear,
-        ),
-      ),
+          (member) => member.batchYear
+        )
+      )
     ).sort((a, b) => a - b);
   }, [members]);
 
-  // ============================================================
-  // SELECT FIRST AVAILABLE YEAR
-  // ============================================================
-
   useEffect(() => {
+    if (availableYears.length === 0) {
+      setSelectedYear(null);
+      return;
+    }
+
     if (
-      availableYears.length > 0 &&
-      !availableYears.includes(
-        selectedYear ?? -1,
-      )
+      selectedYear === null ||
+      !availableYears.includes(selectedYear)
     ) {
-      setSelectedYear(
-        availableYears[availableYears.length - 1],
-      );
+      setSelectedYear(availableYears[0]);
     }
   }, [availableYears, selectedYear]);
-
-  // ============================================================
-  // MEMBERS FOR SELECTED YEAR
-  // ============================================================
 
   const filteredMembers = useMemo(() => {
     if (selectedYear === null) {
@@ -90,34 +82,24 @@ export default function TeamMemberList() {
     return members
       .filter(
         (member) =>
-          member.batchYear ===
-          selectedYear,
+          member.batchYear === selectedYear
       )
       .sort(
-        (a, b) =>
-          a.order - b.order,
+        (a, b) => a.order - b.order
       );
   }, [members, selectedYear]);
 
-  // ============================================================
-  // LOADING
-  // ============================================================
-
   if (loading) {
     return (
-      <div className="w-full flex justify-center py-20">
+      <div className="py-20 flex justify-center">
         <div className="h-10 w-10 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  // ============================================================
-  // ERROR
-  // ============================================================
-
   if (error) {
     return (
-      <div className="w-full text-center py-20">
+      <div className="py-20 text-center">
         <p className="text-red-400">
           {error}
         </p>
@@ -125,122 +107,99 @@ export default function TeamMemberList() {
     );
   }
 
-  // ============================================================
-  // NO TEAM MEMBERS
-  // ============================================================
-
   if (availableYears.length === 0) {
     return (
-      <div className="w-full text-center py-20">
+      <div className="py-20 text-center">
         <p className="text-gray-500">
-          Team members will appear here soon.
+          No team members available yet.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-7xl px-6 py-10">
+    <div className="w-full">
 
-      {/* ======================================================
-          YEAR TABS
-      ======================================================= */}
-
-      <div className="flex flex-wrap justify-center gap-3 mb-12">
-
-        {availableYears.map((year) => {
-          const active =
-            selectedYear === year;
-
-          return (
-            <button
-              key={year}
-              onClick={() =>
-                setSelectedYear(year)
-              }
-              className={`
-                px-5 py-2.5
-                rounded-full
-                text-sm font-bold
-                border
-                transition-all
-
-                ${
-                  active
-                    ? "bg-green-500 text-black border-green-500 shadow-[0_0_25px_rgba(34,197,94,0.35)]"
-                    : "bg-black/40 text-gray-400 border-white/10 hover:border-green-500/50 hover:text-white"
-                }
-              `}
-            >
-              {year}
-            </button>
-          );
-        })}
-
+      {/* YEAR SELECTOR */}
+      <div className="flex justify-center mb-6">
+        <TeamYearDial
+          years={availableYears}
+          selectedYear={selectedYear!}
+          onChange={setSelectedYear}
+        />
       </div>
 
-      {/* ======================================================
-          TEAM MEMBERS
-      ======================================================= */}
+      {/* TEAM MEMBERS */}
+      <div className="mt-4">
 
-      {filteredMembers.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-gray-500">
-            No team members found.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        {filteredMembers.length === 0 ? (
+          <div className="py-16 text-center border border-white/10 rounded-3xl">
+            <p className="text-gray-500">
+              No members found for {selectedYear}.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
 
-          {filteredMembers.map(
-            (member) => (
-              <ProfileCard
+            {filteredMembers.map((member) => (
+              <div
                 key={member._id}
-                name={member.name}
-                title={member.role}
-                handle={member.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "")}
-                status="Online"
-                avatarUrl={
-                  member.photo.url
-                }
-                showUserInfo={true}
-                enableTilt={true}
-                enableMobileTilt={false}
-                githubUrl={
-                  member.github ||
-                  undefined
-                }
-                linkedinUrl={
-                  member.linkedin ||
-                  undefined
-                }
-                onGithubClick={() => {
-                  if (member.github) {
-                    window.open(
-                      member.github,
-                      "_blank",
-                      "noopener,noreferrer",
-                    );
-                  }
-                }}
-                onLinkedinClick={() => {
-                  if (member.linkedin) {
-                    window.open(
-                      member.linkedin,
-                      "_blank",
-                      "noopener,noreferrer",
-                    );
-                  }
-                }}
-              />
-            ),
-          )}
+                className="w-full max-w-[350px]"
+              >
+                <ProfileCard
+                  name={member.name}
 
-        </div>
-      )}
+                  title={member.role}
 
+                  handle={member.name
+                    .toLowerCase()
+                    .replace(/\s+/g, "")}
+
+                  status="Online"
+
+                  avatarUrl={member.photo.url}
+
+                  showUserInfo={true}
+
+                  enableTilt={true}
+
+                  enableMobileTilt={false}
+
+                  githubUrl={
+                    member.github || undefined
+                  }
+
+                  linkedinUrl={
+                    member.linkedin || undefined
+                  }
+
+                  onGithubClick={() => {
+                    if (member.github) {
+                      window.open(
+                        member.github,
+                        "_blank",
+                        "noopener,noreferrer"
+                      );
+                    }
+                  }}
+
+                  onLinkedinClick={() => {
+                    if (member.linkedin) {
+                      window.open(
+                        member.linkedin,
+                        "_blank",
+                        "noopener,noreferrer"
+                      );
+                    }
+                  }}
+                />
+              </div>
+            ))}
+
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
