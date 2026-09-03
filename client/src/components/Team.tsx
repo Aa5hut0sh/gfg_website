@@ -1,286 +1,246 @@
+import { useEffect, useMemo, useState } from "react";
 import ProfileCard from "./ProfileCard";
+import {
+  getTeamMembers,
+  type TeamMember,
+} from "../services/team.service";
 
 export default function TeamMemberList() {
-  return (
-    <div className="px-6 py-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-        <ProfileCard
-          name="Ashish Yadav"
-          title="Vice President"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464336/Ashish_wbg_elow3t.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-        <ProfileCard
-          name="Shreya"
-          title="President"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464338/Shreya_wbg_v00gmo.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-        <ProfileCard
-          name="Kushgra Kumar"
-          title="Vice President"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464338/kushagra_wbg_kdge1e.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-        {/* <ProfileCard
-          name="Aushutosh Kumar"
-          title="Technical Executive"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476259/Ashutosh_xjfewc.jpg"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        /> */}
-        <ProfileCard
-          name="Mayank Maurya"
-          title="Technical Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770560780/Screenshot_2026-02-08_195155-removebg-preview_tioe5y.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  const [selectedYear, setSelectedYear] =
+    useState<number | null>(null);
 
-        {/* <ProfileCard
-          name="Vedant Singh"
-          title="Technical Executive"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476203/Vedant_Singh_joun3q.jpg"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        /> */}
-        
-          <ProfileCard
-          name="Sudipta Das"
-          title="Technical Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561544/Screenshot_2026-02-08_195134-removebg-preview_zmlbyu.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-        
-        <ProfileCard
-          name="Devisha"
-          title="Dev Club President"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770560613/Screenshot_2026-02-08_195230-removebg-preview_xalx7m.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  const [members, setMembers] =
+    useState<TeamMember[]>([]);
 
-        <ProfileCard
-          name="SHWETA"
-          title="Dev Club Vice President"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561281/Screenshot_2026-02-08_195211-removebg-preview_nfmcxj.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-      
-          
-          <ProfileCard
-          name="Mohit Kumar"
-          title="Designing Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770560861/Screenshot_2026-02-08_195034-removebg-preview_zy17g3.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  const [loading, setLoading] =
+    useState(true);
 
-         <ProfileCard
-          name="Agrima Dwivedi"
-          title="Designing Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770560972/Screenshot_2026-02-08_195050-removebg-preview_bfg3ob.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  const [error, setError] =
+    useState("");
 
-         <ProfileCard
-          name="Abhinav Pratap Rai"
-          title="Event Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561069/Screenshot_2026-02-08_194945-removebg-preview_b5d4ny.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  // ============================================================
+  // LOAD ALL TEAM MEMBERS
+  // ============================================================
 
-          <ProfileCard
-          name="Pankaj Kumar"
-          title="Logistic Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561961/Screenshot_2026-02-08_194848-removebg-preview_s35a0j.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-             
+  useEffect(() => {
+    const loadTeam = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-      
-          <ProfileCard
-          name="Anshita"
-          title="Editorial Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561199/Screenshot_2026-02-08_195012-removebg-preview_oetnqa.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
-      
+        const response =
+          await getTeamMembers();
 
-        
-          <ProfileCard
-          name="Raunak Khandelwal"
-          title="Esports Team Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770562073/Screenshot_2026-02-08_201718-removebg-preview_pmpc5n.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+        setMembers(response.members || []);
+      } catch (err: any) {
+        console.error(err);
 
-           <ProfileCard
-          name="Swarnim Raj"
-          title="Esports Team Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561667/Screenshot_2026-02-08_195116-removebg-preview_pj8fd3.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+        setError(
+          err?.response?.data?.message ||
+            "Unable to load team members",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
-           <ProfileCard
-          name="Vivek Singh"
-          title="Social Media Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drcjxszdp/image/upload/v1770555388/vk_copy_usr6ew.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+    loadTeam();
+  }, []);
 
-        <ProfileCard
-          name="Harshita Sharma"
-          title="PR Head"
-          handle="javicodes"
-          status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770561859/Screenshot_2026-02-08_201323-removebg-preview_x9qtpt.png"
-          showUserInfo={true}
-          enableTilt={true}
-          enableMobileTilt={false}
-          githubUrl="https://github.com/javicodes"
-          linkedinUrl="https://linkedin.com/in/javicodes"
-          onGithubClick={() => console.log("GitHub clicked")}
-          onLinkedinClick={() => console.log("LinkedIn clicked")}
-        />
+  // ============================================================
+  // ONLY YEARS WHICH HAVE MEMBERS
+  // ============================================================
 
-        
-             
+  const availableYears = useMemo(() => {
+    return Array.from(
+      new Set(
+        members.map(
+          (member) => member.batchYear,
+        ),
+      ),
+    ).sort((a, b) => a - b);
+  }, [members]);
 
-        
-                   
+  // ============================================================
+  // SELECT FIRST AVAILABLE YEAR
+  // ============================================================
+
+  useEffect(() => {
+    if (
+      availableYears.length > 0 &&
+      !availableYears.includes(
+        selectedYear ?? -1,
+      )
+    ) {
+      setSelectedYear(
+        availableYears[availableYears.length - 1],
+      );
+    }
+  }, [availableYears, selectedYear]);
+
+  // ============================================================
+  // MEMBERS FOR SELECTED YEAR
+  // ============================================================
+
+  const filteredMembers = useMemo(() => {
+    if (selectedYear === null) {
+      return [];
+    }
+
+    return members
+      .filter(
+        (member) =>
+          member.batchYear ===
+          selectedYear,
+      )
+      .sort(
+        (a, b) =>
+          a.order - b.order,
+      );
+  }, [members, selectedYear]);
+
+  // ============================================================
+  // LOADING
+  // ============================================================
+
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center py-20">
+        <div className="h-10 w-10 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
       </div>
+    );
+  }
+
+  // ============================================================
+  // ERROR
+  // ============================================================
+
+  if (error) {
+    return (
+      <div className="w-full text-center py-20">
+        <p className="text-red-400">
+          {error}
+        </p>
+      </div>
+    );
+  }
+
+  // ============================================================
+  // NO TEAM MEMBERS
+  // ============================================================
+
+  if (availableYears.length === 0) {
+    return (
+      <div className="w-full text-center py-20">
+        <p className="text-gray-500">
+          Team members will appear here soon.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-7xl px-6 py-10">
+
+      {/* ======================================================
+          YEAR TABS
+      ======================================================= */}
+
+      <div className="flex flex-wrap justify-center gap-3 mb-12">
+
+        {availableYears.map((year) => {
+          const active =
+            selectedYear === year;
+
+          return (
+            <button
+              key={year}
+              onClick={() =>
+                setSelectedYear(year)
+              }
+              className={`
+                px-5 py-2.5
+                rounded-full
+                text-sm font-bold
+                border
+                transition-all
+
+                ${
+                  active
+                    ? "bg-green-500 text-black border-green-500 shadow-[0_0_25px_rgba(34,197,94,0.35)]"
+                    : "bg-black/40 text-gray-400 border-white/10 hover:border-green-500/50 hover:text-white"
+                }
+              `}
+            >
+              {year}
+            </button>
+          );
+        })}
+
+      </div>
+
+      {/* ======================================================
+          TEAM MEMBERS
+      ======================================================= */}
+
+      {filteredMembers.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-gray-500">
+            No team members found.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+
+          {filteredMembers.map(
+            (member) => (
+              <ProfileCard
+                key={member._id}
+                name={member.name}
+                title={member.role}
+                handle={member.name
+                  .toLowerCase()
+                  .replace(/\s+/g, "")}
+                status="Online"
+                avatarUrl={
+                  member.photo.url
+                }
+                showUserInfo={true}
+                enableTilt={true}
+                enableMobileTilt={false}
+                githubUrl={
+                  member.github ||
+                  undefined
+                }
+                linkedinUrl={
+                  member.linkedin ||
+                  undefined
+                }
+                onGithubClick={() => {
+                  if (member.github) {
+                    window.open(
+                      member.github,
+                      "_blank",
+                      "noopener,noreferrer",
+                    );
+                  }
+                }}
+                onLinkedinClick={() => {
+                  if (member.linkedin) {
+                    window.open(
+                      member.linkedin,
+                      "_blank",
+                      "noopener,noreferrer",
+                    );
+                  }
+                }}
+              />
+            ),
+          )}
+
+        </div>
+      )}
+
     </div>
   );
 }

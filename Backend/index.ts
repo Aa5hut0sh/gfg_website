@@ -9,6 +9,7 @@ import ApplicationRouter from "./routes/application.route";
 import EventRouter from "./routes/event.route";
 import userRouter from "./routes/user.route"
 import { startCronJobs } from "./syncAllProfile";
+import TeamMemberRouter from "./routes/teamMember.routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -37,7 +38,7 @@ app.use("/api/auth" , AuthRouter);
 app.use("/api/application" , ApplicationRouter);
 app.use("/api/event" , EventRouter);
 app.use("/api/user" , userRouter);
-
+app.use("/api/team", TeamMemberRouter);
 
 app.use((err :any , req :Request, res:Response, next:NextFunction) => {
   console.error(err.stack);

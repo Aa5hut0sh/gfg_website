@@ -15,6 +15,7 @@ import EventResponses from "./pages/EventResponses";
 import { useAuth } from "./auth/authContext";
 import Background from "./components/GlowBlob";
 import Lauch from "./pages/lauch";
+import TeamAdmin from "./pages/TeamAdmin";
 import ProfilesPage from "./pages/PlatformPage";
 
 const ProtectedRoute = ({
@@ -74,6 +75,14 @@ const App = () => {
                   <EventResponses />
                 </ProtectedRoute>
               }
+            />
+            <Route
+               path="/team/admin"
+               element={
+             <ProtectedRoute adminOnly>
+              <TeamAdmin />
+            </ProtectedRoute>
+            }
             />
             <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
