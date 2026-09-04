@@ -313,7 +313,6 @@ export const adminSignupHandler = async (
 
 export const sendOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
-  console.log("OTP route requested. Email received:", email);
 
   if (!email) {
     return res.status(400).json({ error: "Email address is required." });
@@ -326,7 +325,6 @@ export const sendOtp = async (req: Request, res: Response) => {
   }
 
   try {
-    // Purane OTPs saaf kar do taaki hamesha fresh OTP rahe
     await Otp.deleteMany({ email });
 
     const otpCode = crypto.randomInt(100000, 999999).toString();
