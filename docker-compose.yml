@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build: ./client
+    container_name: gfg_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  backend:
+    build: ./Backend
+    container_name: gfg_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URL=mongodb://mongo:27017/gfg
+      - PORT=3000
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: gfg_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
