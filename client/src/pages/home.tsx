@@ -59,10 +59,6 @@ const Home = () => {
         <section className=" top-0 relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
           <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-500/20 bg-green-500/5 mb-8">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
               <span className="text-green-500 text-xs font-bold uppercase tracking-widest">
                 RGIPT Student Chapter
               </span>

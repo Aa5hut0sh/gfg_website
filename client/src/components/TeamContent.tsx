@@ -13,23 +13,6 @@ const TeamContent = () => {
       {/* ================= HEADER ================= */}
       <div className="flex flex-col items-center text-center">
 
-        {/* Small GFG RGIPT */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="
-            text-green-400
-            text-xs
-            font-bold
-            uppercase
-            tracking-[0.35em]
-            mb-5
-          "
-        >
-          GFG RGIPT
-        </motion.p>
-
         {/* Heading */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -121,7 +104,6 @@ const TeamContent = () => {
           </motion.div>
         )}
 
-        {/* ================= NORMAL USER BUTTON ================= */}
         {user?.role !== "ADMIN" && (
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -167,7 +149,6 @@ const TeamContent = () => {
 
       </div>
 
-      {/* ================= TEAM ================= */}
 
       <motion.div
         initial={{

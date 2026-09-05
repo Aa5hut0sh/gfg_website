@@ -15,9 +15,6 @@ const isValidBatchYear = (year: number) => {
   );
 };
 
-/* ============================================================
-   CREATE TEAM MEMBER
-   ============================================================ */
 export const createTeamMember = async (
   req: Request,
   res: Response,
@@ -26,7 +23,6 @@ export const createTeamMember = async (
   let uploadedPublicId: string | null = null;
 
   try {
-    console.log("CREATE TEAM MEMBER HIT");
 
     if (req.role !== "ADMIN") {
       return res.status(403).json({
@@ -74,9 +70,7 @@ export const createTeamMember = async (
       });
     }
 
-    /* ========================================================
-       UPLOAD ORIGINAL IMAGE
-       ======================================================== */
+ 
 
     const uploadResult = await cloudinary.uploader.upload(
       `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
@@ -87,9 +81,6 @@ export const createTeamMember = async (
 
     uploadedPublicId = uploadResult.public_id;
 
-    /* ========================================================
-       GENERATE TRANSPARENT IMAGE URL
-       ======================================================== */
 
     const transparentUrl = cloudinary.url(
       uploadResult.public_id,
@@ -104,14 +95,7 @@ export const createTeamMember = async (
       },
     );
 
-    console.log(
-      "Transparent team image URL:",
-      transparentUrl,
-    );
-
-    /* ========================================================
-       SAVE MEMBER
-       ======================================================== */
+  
 
     const member = await TeamMember.create({
       name: name.trim(),
@@ -154,9 +138,7 @@ export const createTeamMember = async (
 };
 
 
-/* ============================================================
-   GET ALL TEAM MEMBERS
-   ============================================================ */
+
 export const getTeamMembers = async (
   req: Request,
   res: Response,
@@ -199,19 +181,12 @@ export const getTeamMembers = async (
 };
 
 
-/* ============================================================
-   GET SINGLE TEAM MEMBER
-   ============================================================ */
 export const getTeamMemberById = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    console.log(
-      "GET TEAM MEMBER BY ID:",
-      req.params.id,
-    );
 
     const { id } = req.params;
 
@@ -241,9 +216,7 @@ export const getTeamMemberById = async (
 };
 
 
-/* ============================================================
-   UPDATE TEAM MEMBER
-   ============================================================ */
+
 export const updateTeamMember = async (
   req: Request,
   res: Response,
@@ -319,9 +292,7 @@ export const updateTeamMember = async (
       member.order = Number(order) || 0;
     }
 
-    /* ========================================================
-       REPLACE IMAGE
-       ======================================================== */
+
 
     if (req.file) {
       const oldPublicId =
@@ -403,9 +374,6 @@ export const updateTeamMember = async (
 };
 
 
-/* ============================================================
-   DELETE TEAM MEMBER
-   ============================================================ */
 export const deleteTeamMember = async (
   req: Request,
   res: Response,

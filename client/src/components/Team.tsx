@@ -57,7 +57,7 @@ export default function TeamMemberList() {
           (member) => member.batchYear
         )
       )
-    ).sort((a, b) => a - b);
+    ).sort((a, b) => b - a);
   }, [members]);
 
   useEffect(() => {

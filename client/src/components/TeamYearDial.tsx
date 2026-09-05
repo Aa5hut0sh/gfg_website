@@ -1,110 +1,155 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-interface Props {
+interface TeamYearDialProps {
   years: number[];
   selectedYear: number;
   onChange: (year: number) => void;
 }
 
+// Roughly how many pill tabs fit before we cap the width and switch to scrolling
+const MAX_VISIBLE_TABS = 3;
+
 export default function TeamYearDial({
   years,
   selectedYear,
   onChange,
-}: Props) {
-  const currentIndex = years.indexOf(selectedYear);
+}: TeamYearDialProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const previousYear =
-    currentIndex > 0 ? years[currentIndex - 1] : null;
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const nextYear =
-    currentIndex < years.length - 1
-      ? years[currentIndex + 1]
-      : null;
+  const isOverflowing = years.length > MAX_VISIBLE_TABS;
 
-  const goPrevious = () => {
-    if (previousYear !== null) {
-      onChange(previousYear);
-    }
+  const updateScrollState = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(
+      el.scrollLeft + el.clientWidth < el.scrollWidth - 4
+    );
   };
 
-  const goNext = () => {
-    if (nextYear !== null) {
-      onChange(nextYear);
-    }
+  useEffect(() => {
+    updateScrollState();
+    window.addEventListener("resize", updateScrollState);
+    return () =>
+      window.removeEventListener("resize", updateScrollState);
+  }, [years]);
+
+  const scrollByAmount = (direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.scrollBy({
+      left: direction === "left" ? -160 : 160,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <div className="w-full flex items-center justify-center gap-3 sm:gap-8 py-8">
-      {/* Previous */}
-      <button
-        type="button"
-        onClick={goPrevious}
-        disabled={previousYear === null}
-        aria-label="Previous batch"
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-gray-500 hover:text-white hover:border-green-500/40 hover:bg-green-500/5 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300"
-      >
-        <ChevronLeft size={22} />
-      </button>
+    <div className="flex justify-center mb-10">
+      <div className="relative flex items-center">
+        {/* LEFT ARROW */}
+        {isOverflowing && (
+          <button
+            onClick={() => scrollByAmount("left")}
+            disabled={!canScrollLeft}
+            className={`
+              flex items-center justify-center
+              w-7 h-7 mr-1 rounded-full
+              text-[#888] transition-opacity duration-200
+              ${
+                canScrollLeft
+                  ? "opacity-60 hover:opacity-100"
+                  : "opacity-20 cursor-default"
+              }
+            `}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+        )}
 
-      {/* Year Dial */}
-      <div className="flex items-center justify-center gap-3 sm:gap-6 min-w-0">
-        {/* Previous Year */}
-        <button
-          type="button"
-          disabled={previousYear === null}
-          onClick={() =>
-            previousYear !== null &&
-            onChange(previousYear)
-          }
-          className="w-20 sm:w-28 text-center text-sm sm:text-base font-semibold text-gray-600 hover:text-gray-300 transition-all duration-500 disabled:opacity-0"
+        {/* TABS */}
+        <div
+          ref={scrollRef}
+          onScroll={updateScrollState}
+          className={`
+            flex bg-[#0d0d0d] border border-[#1f1f1f] rounded-2xl p-1 gap-0.5
+            overflow-x-auto scroll-smooth
+            [&::-webkit-scrollbar]:hidden
+          `}
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            maxWidth: isOverflowing ? "340px" : undefined,
+          }}
         >
-          {previousYear ?? ""}
-        </button>
+          {years.map((year) => {
+            const isActive = selectedYear === year;
 
-        {/* Selected Year */}
-        <button
-          type="button"
-          onClick={() => onChange(selectedYear)}
-          className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center shrink-0 group"
-        >
-          {/* Outer rotating ring */}
-          <span className="absolute inset-0 rounded-full border border-green-500/20" />
+            return (
+              <button
+                key={year}
+                onClick={() => onChange(year)}
+                className={`
+                  shrink-0 px-6 py-2.5 rounded-xl
+                  text-[11px] font-bold uppercase tracking-widest
+                  transition-all duration-200
+                  ${
+                    isActive
+                      ? "bg-[#16a34a] text-black shadow-[0_0_20px_rgba(22,163,74,0.2)]"
+                      : "text-[#555] hover:text-[#f0f0f0] hover:bg-[#1a1a1a]"
+                  }
+                `}
+              >
+                {year}
+              </button>
+            );
+          })}
+        </div>
 
-          <span className="absolute -inset-1 rounded-full border border-green-500/10 group-hover:border-green-500/30 transition-all duration-500" />
-
-          {/* Circular glow */}
-          <span className="absolute inset-2 rounded-full bg-green-500/[0.08] group-hover:bg-green-500/[0.13] transition-all duration-500" />
-
-          {/* Year */}
-          <span className="relative z-10 text-xl sm:text-2xl font-black text-green-400 tracking-tight">
-            {selectedYear}
-          </span>
-        </button>
-
-        {/* Next Year */}
-        <button
-          type="button"
-          disabled={nextYear === null}
-          onClick={() =>
-            nextYear !== null &&
-            onChange(nextYear)
-          }
-          className="w-20 sm:w-28 text-center text-sm sm:text-base font-semibold text-gray-600 hover:text-gray-300 transition-all duration-500 disabled:opacity-0"
-        >
-          {nextYear ?? ""}
-        </button>
+        {/* RIGHT ARROW */}
+        {isOverflowing && (
+          <button
+            onClick={() => scrollByAmount("right")}
+            disabled={!canScrollRight}
+            className={`
+              flex items-center justify-center
+              w-7 h-7 ml-1 rounded-full
+              text-[#888] transition-opacity duration-200
+              ${
+                canScrollRight
+                  ? "opacity-60 hover:opacity-100"
+                  : "opacity-20 cursor-default"
+              }
+            `}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        )}
       </div>
-
-      {/* Next */}
-      <button
-        type="button"
-        onClick={goNext}
-        disabled={nextYear === null}
-        aria-label="Next batch"
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center text-gray-500 hover:text-white hover:border-green-500/40 hover:bg-green-500/5 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300"
-      >
-        <ChevronRight size={22} />
-      </button>
     </div>
   );
 }
