@@ -1,39 +1,199 @@
-
 import { motion } from "motion/react";
+import { useAuth } from "../auth/authContext";
+import { Link } from "react-router-dom";
+import { Settings } from "lucide-react";
 import TeamMemberList from "./Team";
 
-export default function TeamContent() {
+const TeamContent = () => {
+  const { user } = useAuth();
+
   return (
-    <div className="flex flex-col items-center justify-center py-4 px-4 mt-25">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-8"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+    <section className="relative w-full min-h-screen px-5 md:px-8 pt-24 pb-20">
+
+      {/* ================= HEADER ================= */}
+      <div className="flex flex-col items-center text-center">
+
+        {/* Small GFG RGIPT */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="
+            text-green-400
+            text-xs
+            font-bold
+            uppercase
+            tracking-[0.35em]
+            mb-5
+          "
+        >
+          GFG RGIPT
+        </motion.p>
+
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="
+            text-4xl
+            md:text-5xl
+            lg:text-6xl
+            font-bold
+            text-white
+            leading-tight
+          "
+        >
           Nothing great is{" "}
-          <span className="bg-yellow-300 px-2 py-1 text-black rounded-md">
+          <span
+            className="
+              inline-block
+              bg-yellow-300
+              text-black
+              px-3
+              py-1
+              rounded-md
+            "
+          >
             made
           </span>{" "}
           alone.
-        </h2>
-      </motion.div>
+        </motion.h1>
+
+        {/* ================= ADMIN BUTTON ================= */}
+        {user?.role === "ADMIN" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+            }}
+            className="mt-7"
+          >
+            <Link
+              to="/team/admin"
+              className="
+                group
+                relative
+                overflow-hidden
+                inline-flex
+                items-center
+                gap-2
+                px-6
+                py-3
+                rounded-lg
+                border
+                border-green-400/70
+                text-white
+                font-semibold
+                transition-all
+                duration-300
+                hover:border-green-300
+                hover:bg-green-400/10
+              "
+            >
+              {/* Shine */}
+              <span
+                className="
+                  absolute
+                  inset-0
+                  -translate-x-full
+                  group-hover:translate-x-full
+                  bg-gradient-to-r
+                  from-transparent
+                  via-white/20
+                  to-transparent
+                  transition-transform
+                  duration-700
+                "
+              />
+
+              <Settings
+                size={17}
+                className="relative z-10"
+              />
+
+              <span className="relative z-10">
+                MANAGE TEAM
+              </span>
+            </Link>
+          </motion.div>
+        )}
+
+        {/* ================= NORMAL USER BUTTON ================= */}
+        {user?.role !== "ADMIN" && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+            }}
+            className="mt-7"
+          >
+            <div
+              className="
+                relative
+                overflow-hidden
+                border
+                border-green-300/70
+                text-white
+                font-semibold
+                py-3
+                px-7
+                rounded-lg
+              "
+            >
+              <div
+                className="
+                  absolute
+                  inset-0
+                  bg-gradient-to-r
+                  from-transparent
+                  via-white/20
+                  to-transparent
+                  -translate-x-full
+                  animate-[shine_2.5s_infinite]
+                "
+              />
+
+              <span className="relative z-10">
+                Meet Our Core Team
+              </span>
+            </div>
+          </motion.div>
+        )}
+
+      </div>
+
+      {/* ================= TEAM ================= */}
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-4"
+        initial={{
+          opacity: 0,
+          y: 25,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.6,
+          delay: 0.3,
+        }}
+        className="
+          w-full
+          max-w-[1200px]
+          mx-auto
+          mt-8
+        "
       >
-        <div className="relative overflow-hidden bg-transparent border-1 border-green-300 text-white font-semibold py-3 px-6 rounded-lg cursor-default select-none group">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out animate-pulse"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-green-400/10 animate-pulse"></div>
-          <span className="relative z-10">Meet Our Core Team</span>
-        </div>
+        <TeamMemberList />
       </motion.div>
 
-      <TeamMemberList/>
-    </div>
+    </section>
   );
-}
+};
+
+export default TeamContent;
