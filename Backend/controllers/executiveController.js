@@ -1,3 +1,5 @@
+import User from "../models/User.js";
+import Task from "../models/Task.js";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

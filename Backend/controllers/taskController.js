@@ -1,8 +1,10 @@
+import User from "../models/User.js";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 // Create and assign task to an Executive (Admin only)
+
 export const createTask = async (req, res) => {
   const { title, description, assignedToId, dueDate } = req.body;
 
