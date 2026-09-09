@@ -1,6 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const taskSchema = new mongoose.Schema(
+export interface ITask extends Document {
+  title: string;
+  description?: string;
+  assignedTo: mongoose.Types.ObjectId;
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  dueDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const taskSchema = new Schema<ITask>(
   {
     title: {
       type: String,
@@ -12,7 +22,7 @@ const taskSchema = new mongoose.Schema(
       trim: true,
     },
     assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Assignee is required'],
     },
@@ -28,4 +38,4 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Task = mongoose.model('Task', taskSchema);
+export const Task = mongoose.model<ITask>('Task', taskSchema);
