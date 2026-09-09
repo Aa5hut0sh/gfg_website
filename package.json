@@ -12,5 +12,24 @@
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@types/nodemailer": "^8.0.1"
-  }
+  },
+  "name": "ems-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aa5hut0sh/gfg_website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aa5hut0sh/gfg_website/issues"
+  },
+  "homepage": "https://github.com/Aa5hut0sh/gfg_website#readme"
 }
