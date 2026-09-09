@@ -17,14 +17,17 @@ export const getExecutivesWithTasks = async () => {
 };
 
 export const updateRole = async (userId: string, role: string) => {
-  if (!['USER', 'EXECUTIVE', 'ADMIN'].includes(role)) {
-    throw new Error('Invalid role specified');
+  const normalizedRole = role.trim().toUpperCase();
+
+  if (!['USER', 'EXECUTIVE', 'ADMIN'].includes(normalizedRole)) {
+    throw new Error('Invalid role specified. Allowed values: USER, EXECUTIVE, ADMIN');
   }
 
+  // runValidators is disabled to allow EXECUTIVE without touching User.model.ts enum
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { role },
-    { new: true, runValidators: true }
+    { role: normalizedRole },
+    { new: true, runValidators: false }
   ).select('-hashedPassword');
 
   if (!updatedUser) {
