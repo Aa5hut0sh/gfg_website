@@ -2,13 +2,13 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 
-type UserRole = "USER" | "ADMIN";
+type UserRole = "USER" | "ADMIN" | "EXECUTIVE";
 
 declare global {
   namespace Express {
     interface Request {
       userId?: string;
-      role?:UserRole
+      role?: UserRole;
     }
   }
 }
@@ -24,7 +24,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
     const token = authHeader.substring(7); 
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { userId: string  , role:UserRole};
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { userId: string; role: UserRole };
 
     req.userId = decoded.userId;
     req.role = decoded.role;

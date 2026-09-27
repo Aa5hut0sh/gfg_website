@@ -4,23 +4,36 @@ import {
   updateUserRole,
   assignTask,
   updateTaskStatus,
+  getMyTasks,
+  getOverdueTasks,
+  getTaskSummary,
+  getTaskById,
+  deleteTask,
 } from '../controllers/executive.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
+
 router.use(authenticate);
 
-// Executive list & dashboard overview
-router.get('/dashboard', getDashboard);
 
-// Admin-only role elevation
+router.get('/dashboard', getDashboard);
+router.get('/tasks/summary', getTaskSummary);
+router.get('/tasks/overdue', getOverdueTasks);
+
+
 router.patch('/users/:userId/role', updateUserRole);
 
-// Task assignment
-router.post('/tasks', assignTask);
 
-// Task status modification
+router.post('/tasks', assignTask);
+router.delete('/tasks/:taskId', deleteTask);
+
+
+router.get('/tasks/my', getMyTasks);
+
+
+router.get('/tasks/:taskId', getTaskById);
 router.patch('/tasks/:taskId/status', updateTaskStatus);
 
 export default router;

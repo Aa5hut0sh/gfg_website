@@ -99,8 +99,8 @@ export const getAllApplication = async (
     const userId = req.userId;
     const role = req.role;
 
-    if (role == "USER") {
-      return res.status(400).json({
+    if (role !== "ADMIN") {
+      return res.status(403).json({
         success: false,
         message: "Only admins can access all the forms",
       });
@@ -163,8 +163,8 @@ export const updateApplicationHandler = async (
       });
     }
 
-    if (role === "USER") {
-      return res.status(400).json({
+    if (role !== "ADMIN") {
+      return res.status(403).json({
         success: false,
         message: "Only admins can update the status",
       });
@@ -234,7 +234,7 @@ export const exportApplicationsToExcel = async (
   try {
     const role = req.role;
 
-    if (role === "USER") {
+    if (role !== "ADMIN") {
       return res.status(403).json({
         success: false,
         message: "Only admins can export applications",

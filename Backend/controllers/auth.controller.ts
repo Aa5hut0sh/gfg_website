@@ -11,7 +11,7 @@ import User from "../models/User.model.ts";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-type userRole = "USER" | "ADMIN";
+type userRole = "USER" | "ADMIN" | "EXECUTIVE";
 
 export const generateAccessToken = ({ id, role }: { id: string; role: userRole }): string => {
   return jwt.sign({ userId: id, role: role }, process.env.JWT_SECRET || "secret", {

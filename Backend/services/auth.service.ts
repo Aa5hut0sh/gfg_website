@@ -1,5 +1,5 @@
 import User from './../models/User.model'
-type Role = "USER"|"ADMIN";
+type Role = "USER" | "ADMIN" | "EXECUTIVE";
 
 
 export const createUser = async (email: string, hashedPassword: string, name?: string , role?:Role) => {

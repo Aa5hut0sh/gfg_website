@@ -33,10 +33,10 @@ export const addleetCode = async (
     const { leetcode } = req.body;
     const userId = req.userId;
 
-    if(req.role=="ADMIN"){
+    if(req.role==="ADMIN"){
       return res.status(400).json({
         success:false,
-        message:"Admins can't add thier profile"
+        message:"Admins can't add their profile"
       });
     }
 
@@ -83,10 +83,10 @@ export const addcodeforces = async (
     const { codeforces } = req.body;
     const userId = req.userId;
 
-    if(req.role=="ADMIN"){
+    if(req.role==="ADMIN"){
       return res.status(400).json({
         success:false,
-        message:"Admins can't add thier profile"
+        message:"Admins can't add their profile"
       });
     }
 
@@ -317,10 +317,10 @@ export const getAllProfiles = async (
 ) => {
   try {
 
-    if(req.role=="USER"){
-      return res.status(400).json({
+    if(req.role !== "ADMIN"){
+      return res.status(403).json({
         success:false,
-        message:"User can't get all profile"
+        message:"Only admins can get all profiles"
       });
     }
     const users = await User.find()
