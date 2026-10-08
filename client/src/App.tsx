@@ -17,6 +17,7 @@ import Lauch from "./pages/lauch";
 import TeamAdmin from "./pages/TeamAdmin";
 import ProfilesPage from "./pages/PlatformPage";
 import ForgotPassword from "./components/ForgotPassword"; 
+import ExecutiveManagement from "./pages/ExecutiveManagement";
 
 const ProtectedRoute = ({
   children,
@@ -85,6 +86,14 @@ const App = () => {
               <TeamAdmin />
             </ProtectedRoute>
             }
+            />
+            <Route
+              path="/executive-management"
+              element={
+                <ProtectedRoute adminOnly>
+                  <ExecutiveManagement />
+                </ProtectedRoute>
+              }
             />
             <Route path="*" element={<Navigate to="/home" />} />
           </Routes>

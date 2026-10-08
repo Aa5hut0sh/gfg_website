@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
+export type UserRole = "ADMIN" | "USER" | "EXECUTIVE";
+
 export type User = {
   id: string;
   name?: string;
   email: string;
-  role?: string;
+  role?: UserRole;
 };
 
 type AuthContextType = {
