@@ -19,6 +19,7 @@ import ProfilesPage from "./pages/PlatformPage";
 import ForgotPassword from "./components/ForgotPassword"; 
 import ExecutiveManagement from "./pages/ExecutiveManagement";
 
+//todo - Edit such that admin and executive seperate routes can be handled
 const ProtectedRoute = ({
   children,
   adminOnly = false,
